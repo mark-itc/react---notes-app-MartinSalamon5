@@ -1,0 +1,8 @@
+.note-box {
+  background-color: aliceblue;
+  border: black solid 1.5px;
+  border-radius: 5px;
+  margin: 20px;
+  height: 200px;
+  width: 200px;
+}
