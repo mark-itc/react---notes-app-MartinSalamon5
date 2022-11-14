@@ -12,3 +12,67 @@
   font-size: calc(10px + 2vmin);
   color: black;
 }
+
+.note-grid-box {
+  position: absolute;
+  top: 150px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
+  background-color: rgb(238, 238, 238);
+  overflow: scroll;
+  border: 1px black solid;
+  border-radius: 5px;
+}
+
+.note-box {
+  background-color: antiquewhite;
+  border: black solid 1.5px;
+  border-radius: 5px;
+  margin: 20px;
+  height: 200px;
+  width: 200px;
+  padding: 15px;
+}
+
+.note-creator-form {
+  display: flex;
+  align-items: top;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+}
+
+.note-input-area {
+  height: 100px;
+  width: 30%;
+  resize: horizontal;
+  resize: none;
+  border: 1px black solid;
+  border-radius: 5px;
+  background-color: rgb(238, 238, 238);
+  padding: 10px;
+}
+
+.note-submit-button {
+  height: 50px;
+  width: 50px;
+  margin-left: 20px;
+  font-size: 20px;
+  background-color: rgb(164, 199, 164);
+  color: rgb(166, 171, 166);
+  border-radius: 5px;
+}
+
+.note-submit-button:hover {
+  background-color: rgb(136, 210, 136);
+  color: rgb(15, 11, 11);
+  border-radius: 5px;
+  cursor: pointer;
+}
