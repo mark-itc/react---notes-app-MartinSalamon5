@@ -13,6 +13,20 @@
   color: black;
 }
 
+.inputs-box {
+  display: flex;
+  flex-direction: column;
+  height: 130px;
+  width: 35%;
+}
+
+.title-input {
+  border: 1px black solid;
+  border-radius: 5px;
+  background-color: rgb(238, 238, 238);
+  padding: 10px;
+}
+
 .note-grid-box {
   position: absolute;
   top: 150px;
@@ -30,14 +44,22 @@
   border-radius: 5px;
 }
 
-.note-box {
+.note-box-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
   background-color: antiquewhite;
   border: black solid 1.5px;
   border-radius: 5px;
-  margin: 20px;
-  height: 200px;
-  width: 200px;
   padding: 15px;
+  margin: 5px;
+}
+
+.note-box {
+  display: flex;
+  flex-direction: column;
+  height: 180px;
+  width: 150px;
 }
 
 .note-creator-form {
@@ -51,7 +73,6 @@
 
 .note-input-area {
   height: 100px;
-  width: 30%;
   resize: horizontal;
   resize: none;
   border: 1px black solid;
@@ -61,18 +82,51 @@
 }
 
 .note-submit-button {
-  height: 50px;
-  width: 50px;
+  height: 38px;
+  width: 38px;
   margin-left: 20px;
   font-size: 20px;
-  background-color: rgb(164, 199, 164);
-  color: rgb(166, 171, 166);
+  background-color: rgb(136, 210, 136);
+  color: rgb(15, 11, 11);
   border-radius: 5px;
 }
 
 .note-submit-button:hover {
-  background-color: rgb(136, 210, 136);
+  background-color: rgb(189, 215, 189);
   color: rgb(15, 11, 11);
   border-radius: 5px;
   cursor: pointer;
+}
+
+.delete-button {
+  width: 22px;
+  height: 22px;
+  align-self: flex-end;
+  position: absolute;
+}
+
+.note-date {
+  font-size: smaller;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  width: 500px;
+  background-color: antiquewhite;
+  position: absolute;
+  top: 100px;
+  left: 30%;
+  right: 30%;
+  border: #282c34 solid 1px;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.modal-close-button {
+  width: 22px;
+  height: 22px;
+  align-self: flex-end;
+  margin: 20px 20px 0 0;
 }
