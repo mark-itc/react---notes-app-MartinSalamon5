@@ -6,49 +6,82 @@ function NoteBox(props) {
   const { date, noteText, myKey, deleteNote, noteTitle, openModal } = props;
   return (
     <div className="note-box-wrapper">
-      <button
-        className="delete-button"
-        onClick={() => {
-          deleteNote(myKey);
-        }}
-      >
-        x
-      </button>
+      <div className="note-box-header">
+        <p className="note-date">{date}</p>
+
+        <button
+          className="delete-button"
+          onClick={() => {
+            deleteNote(myKey);
+          }}
+        >
+          x
+        </button>
+      </div>
       <div
         className="note-box"
         onClick={() => {
           openModal(date, noteTitle, noteText);
         }}
       >
-        <p className="note-date">{date}</p>
-        <h5>{noteTitle}</h5>
-        <p>{noteText}</p>
+        <h3 className="note-box-title">{noteTitle}</h3>
+        <p className="note-box-text-content">{noteText}</p>
       </div>
     </div>
   );
 }
 
 function NoteCreatorForm({ addNote }) {
+  const [title, setTitle] = useState("");
+  const [noteContent, setNoteContent] = useState("");
+
+  const clearAllInputFields = () => {
+    setTitle("");
+    setNoteContent("");
+  };
+  const handleTitle = (e) => {
+    setTitle(e.target.value);
+  };
+  const handleNoteContent = (e) => {
+    setNoteContent(e.target.value);
+  };
   const submitNote = (e) => {
     e.preventDefault();
-    addNote("Note Title");
+    if (noteContent != "") {
+      addNote(title, noteContent);
+      clearAllInputFields();
+    }
   };
   return (
     <form className="note-creator-form">
       <div className="inputs-box">
-        <input className="title-input" placeholder="Title..."></input>
+        <input
+          className="title-input"
+          placeholder="Title..."
+          onChange={handleTitle}
+          value={title}
+        ></input>
         <textarea
           className="note-input-area"
           type="text"
-          placeholder="Type your Note here..."
+          placeholder="Type your note here..."
+          onChange={handleNoteContent}
+          value={noteContent}
         ></textarea>
       </div>
-      <button onClick={submitNote} type="submit" className="note-submit-button">
+      <button
+        onClick={(title, noteContent) => {
+          submitNote(title, noteContent);
+        }}
+        type="submit"
+        className="note-submit-button"
+      >
         +
       </button>
     </form>
   );
 }
+
 Modal.setAppElement("#root");
 
 function App() {
@@ -56,6 +89,9 @@ function App() {
   const [modalDate, setModalDate] = useState();
   const [modalTitle, setModalTitle] = useState();
   const [modalText, setModalText] = useState();
+  const [dates, createDate] = useState([]);
+  const [titles, setTitle] = useState([]);
+  const [noteContents, setNoteContent] = useState([]);
 
   function openModal(date, noteTitle, noteText) {
     setIsOpen(true);
@@ -66,8 +102,8 @@ function App() {
   function closeModal() {
     setIsOpen(false);
   }
-  const [dates, createDate] = useState([]);
-  const addNote = () => {
+
+  const addNote = (title, noteContent) => {
     const dateCreator = new Date();
     const options = {
       year: "numeric",
@@ -76,8 +112,13 @@ function App() {
       hour: "numeric",
       minute: "numeric",
     };
+
     const newDate = dateCreator.toLocaleDateString(undefined, options);
     createDate([...dates, newDate]);
+    const newTitle = title;
+    setTitle([...titles, newTitle]);
+    const newContent = noteContent;
+    setNoteContent([...noteContents, newContent]);
   };
   const removeNote = (myKey) => {
     const deletePopUp = window.confirm(
@@ -85,8 +126,14 @@ function App() {
     );
     if (deletePopUp == true) {
       const dateDuplicate = [...dates];
+      const titlesDuplicate = [...titles];
+      const noteContentsDuplicate = [...noteContents];
       dateDuplicate.splice(myKey, 1);
+      titlesDuplicate.splice(myKey, 1);
+      noteContentsDuplicate.splice(myKey, 1);
       createDate(dateDuplicate);
+      setTitle(titlesDuplicate);
+      setNoteContent(noteContentsDuplicate);
     }
   };
   return (
@@ -98,9 +145,10 @@ function App() {
         <button className="modal-close-button" onClick={closeModal}>
           x
         </button>
-        <p>{modalDate}</p>
-        <h2>{modalTitle}</h2>
-        <p>{modalText}</p>
+        <p className="modal-date">{modalDate}</p>
+        <h2 className="modal-title">{modalTitle}</h2>
+        <p className="modal-text-content">{modalText}</p>
+        <button className="modal-edit-button">Edit note</button>
       </Modal>
 
       <NoteCreatorForm addNote={addNote} />
@@ -112,8 +160,8 @@ function App() {
               key={key}
               myKey={key}
               deleteNote={removeNote}
-              noteTitle={"Note Title"}
-              noteText={"Example Note"}
+              noteTitle={titles[key]}
+              noteText={noteContents[key]}
               openModal={openModal}
             />
           );

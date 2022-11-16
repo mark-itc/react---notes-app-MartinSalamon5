@@ -35,7 +35,8 @@
   bottom: 20px;
   margin-top: 20px;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(auto-fill, 250px);
+  grid-template-rows: repeat(auto-fill, 250px);
   grid-column-gap: 2px;
   grid-row-gap: 2px;
   background-color: rgb(238, 238, 238);
@@ -47,19 +48,41 @@
 .note-box-wrapper {
   display: flex;
   flex-direction: column;
-  height: fit-content;
+  height: 220px;
+  width: 220px;
   background-color: antiquewhite;
   border: black solid 1.5px;
   border-radius: 5px;
-  padding: 15px;
+  padding: 10px;
   margin: 5px;
+}
+
+.note-box-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .note-box {
   display: flex;
   flex-direction: column;
-  height: 180px;
-  width: 150px;
+}
+
+.note-box-text-content {
+  position: absolute;
+  top: 54px;
+  height: 164px;
+  width: 212px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.note-box-title {
+  position: absolute;
+  top: 35px;
+  margin: 8px 0 0 0;
 }
 
 .note-creator-form {
@@ -101,12 +124,11 @@
 .delete-button {
   width: 22px;
   height: 22px;
-  align-self: flex-end;
-  position: absolute;
 }
 
 .note-date {
   font-size: smaller;
+  margin: 0;
 }
 
 .modal {
@@ -127,6 +149,25 @@
 .modal-close-button {
   width: 22px;
   height: 22px;
-  align-self: flex-end;
-  margin: 20px 20px 0 0;
+  position: absolute;
+  right: 20px;
+}
+
+.modal-edit-button {
+  position: absolute;
+  bottom: 20px;
+}
+
+.modal-date {
+  position: absolute;
+  margin: 5px 0 0 0;
+}
+
+.modal-title {
+  margin-top: 40px;
+}
+
+.modal-text-content {
+  height: 376px;
+  margin-top: 0;
 }
