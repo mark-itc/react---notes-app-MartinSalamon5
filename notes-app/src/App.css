@@ -22,8 +22,18 @@
 
 .title-input {
   border: 1px black solid;
-  border-radius: 5px;
-  background-color: rgb(238, 238, 238);
+  border-radius: 15px 15px 0 0;
+  background: linear-gradient(rgb(238, 238, 238), rgb(221, 221, 221));
+  padding: 10px;
+}
+
+.note-input-area {
+  height: 100px;
+  resize: horizontal;
+  resize: none;
+  border: 1px black solid;
+  border-radius: 0 0 15px 0;
+  background: linear-gradient(rgb(238, 238, 238), rgb(232 232 232));
   padding: 10px;
 }
 
@@ -33,16 +43,15 @@
   left: 20px;
   right: 20px;
   bottom: 20px;
-  margin-top: 20px;
+  margin-top: 15px;
   display: grid;
   grid-template-columns: repeat(auto-fill, 250px);
   grid-template-rows: repeat(auto-fill, 250px);
   grid-column-gap: 2px;
   grid-row-gap: 2px;
-  background-color: rgb(238, 238, 238);
+  background: linear-gradient(rgb(238, 238, 238), rgb(232 232 232));
   overflow: scroll;
   border: 1px black solid;
-  border-radius: 5px;
 }
 
 .note-box-wrapper {
@@ -50,9 +59,9 @@
   flex-direction: column;
   height: 220px;
   width: 220px;
-  background-color: antiquewhite;
+  background: linear-gradient(antiquewhite, rgb(238, 209, 170));
   border: black solid 1.5px;
-  border-radius: 5px;
+  border-radius: 0 30px 30px 30px;
   padding: 10px;
   margin: 5px;
 }
@@ -70,9 +79,7 @@
 }
 
 .note-box-text-content {
-  position: absolute;
-  top: 54px;
-  height: 164px;
+  height: 148px;
   width: 212px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -80,8 +87,10 @@
 }
 
 .note-box-title {
-  position: absolute;
-  top: 35px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 22px;
+  text-align: left;
   margin: 8px 0 0 0;
 }
 
@@ -94,16 +103,6 @@
   right: 20px;
 }
 
-.note-input-area {
-  height: 100px;
-  resize: horizontal;
-  resize: none;
-  border: 1px black solid;
-  border-radius: 5px;
-  background-color: rgb(238, 238, 238);
-  padding: 10px;
-}
-
 .note-submit-button {
   height: 38px;
   width: 38px;
@@ -111,24 +110,33 @@
   font-size: 20px;
   background-color: rgb(136, 210, 136);
   color: rgb(15, 11, 11);
-  border-radius: 5px;
+  border-radius: 15px;
 }
 
 .note-submit-button:hover {
   background-color: rgb(189, 215, 189);
   color: rgb(15, 11, 11);
-  border-radius: 5px;
+  border-radius: 15px;
   cursor: pointer;
 }
 
 .delete-button {
   width: 22px;
   height: 22px;
+  border-radius: 50%;
+  border: rgb(165, 164, 164) solid 1px;
+}
+
+.delete-button:hover {
+  cursor: pointer;
+  border: 1px red solid;
+  color: red;
 }
 
 .note-date {
   font-size: smaller;
   margin: 0;
+  text-align: left;
 }
 
 .modal {
@@ -136,31 +144,62 @@
   flex-direction: column;
   height: 500px;
   width: 500px;
-  background-color: antiquewhite;
+  background: linear-gradient(antiquewhite, rgb(230, 200, 160));
   position: absolute;
   top: 100px;
   left: 30%;
   right: 30%;
   border: #282c34 solid 1px;
-  border-radius: 20px;
+  border-radius: 0 25px 25px 25px;
   padding: 20px;
 }
 
 .modal-close-button {
-  width: 22px;
-  height: 22px;
   position: absolute;
   right: 20px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: rgb(102, 102, 102) solid 1px;
+  color: rgb(102, 102, 102);
+}
+
+.modal-close-button:hover {
+  cursor: pointer;
+  border: 1px rgb(102, 102, 102) solid;
+  color: rgb(102, 102, 102);
+}
+
+.modal-footer {
+  position: absolute;
+  bottom: 20px;
+  width: 490px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .modal-edit-button {
-  position: absolute;
-  bottom: 20px;
+  border-radius: 5px;
+  border: 1px rgb(102, 102, 102) solid;
+}
+
+.modal-edit-button:hover {
+  border: 1px rgb(102, 102, 102) solid;
+  cursor: pointer;
 }
 
 .modal-date {
   position: absolute;
-  margin: 5px 0 0 0;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 30px;
+}
+
+.creation-date-title {
+  margin: 0 5px 0 0;
 }
 
 .modal-title {
@@ -170,4 +209,27 @@
 .modal-text-content {
   height: 376px;
   margin-top: 0;
+}
+
+.modal-edit-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-edit-text {
+  height: 354px;
+  resize: none;
+  border: 1px black solid;
+  border-radius: 5px;
+  background-color: rgb(238, 238, 238);
+  padding: 10px;
+  margin-top: 12px;
+}
+
+.modal-edit-title {
+  border: 1px black solid;
+  border-radius: 5px;
+  background-color: rgb(238, 238, 238);
+  padding: 10px;
+  margin-top: 20px;
 }

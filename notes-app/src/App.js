@@ -1,86 +1,8 @@
 import "./App.css";
 import { useState } from "react";
 import Modal from "react-modal";
-
-function NoteBox(props) {
-  const { date, noteText, myKey, deleteNote, noteTitle, openModal } = props;
-  return (
-    <div className="note-box-wrapper">
-      <div className="note-box-header">
-        <p className="note-date">{date}</p>
-
-        <button
-          className="delete-button"
-          onClick={() => {
-            deleteNote(myKey);
-          }}
-        >
-          x
-        </button>
-      </div>
-      <div
-        className="note-box"
-        onClick={() => {
-          openModal(date, noteTitle, noteText);
-        }}
-      >
-        <h3 className="note-box-title">{noteTitle}</h3>
-        <p className="note-box-text-content">{noteText}</p>
-      </div>
-    </div>
-  );
-}
-
-function NoteCreatorForm({ addNote }) {
-  const [title, setTitle] = useState("");
-  const [noteContent, setNoteContent] = useState("");
-
-  const clearAllInputFields = () => {
-    setTitle("");
-    setNoteContent("");
-  };
-  const handleTitle = (e) => {
-    setTitle(e.target.value);
-  };
-  const handleNoteContent = (e) => {
-    setNoteContent(e.target.value);
-  };
-  const submitNote = (e) => {
-    e.preventDefault();
-    if (noteContent != "") {
-      addNote(title, noteContent);
-      clearAllInputFields();
-    }
-  };
-  return (
-    <form className="note-creator-form">
-      <div className="inputs-box">
-        <input
-          className="title-input"
-          placeholder="Title..."
-          onChange={handleTitle}
-          value={title}
-        ></input>
-        <textarea
-          className="note-input-area"
-          type="text"
-          placeholder="Type your note here..."
-          onChange={handleNoteContent}
-          value={noteContent}
-        ></textarea>
-      </div>
-      <button
-        onClick={(title, noteContent) => {
-          submitNote(title, noteContent);
-        }}
-        type="submit"
-        className="note-submit-button"
-      >
-        +
-      </button>
-    </form>
-  );
-}
+import NoteCreatorForm from "./Components/NoteCreatorForm";
+import NoteBox from "./Components/NoteBox";
 
 Modal.setAppElement("#root");
 
@@ -89,25 +11,29 @@ function App() {
   const [modalDate, setModalDate] = useState();
   const [modalTitle, setModalTitle] = useState();
   const [modalText, setModalText] = useState();
+  const [modalKey, setModalKey] = useState();
   const [dates, createDate] = useState([]);
   const [titles, setTitle] = useState([]);
   const [noteContents, setNoteContent] = useState([]);
+  const [editDates, setEditDates] = useState([]);
 
-  function openModal(date, noteTitle, noteText) {
+  function openModal(date, noteTitle, noteText, myKey) {
     setIsOpen(true);
     setModalDate(date);
     setModalTitle(noteTitle);
     setModalText(noteText);
+    setModalKey(myKey);
   }
   function closeModal() {
     setIsOpen(false);
+    exitEditNoteHandler();
   }
 
-  const addNote = (title, noteContent) => {
+  const postNote = (title, noteContent) => {
     const dateCreator = new Date();
     const options = {
       year: "numeric",
-      month: "long",
+      month: "short",
       day: "numeric",
       hour: "numeric",
       minute: "numeric",
@@ -115,43 +41,159 @@ function App() {
 
     const newDate = dateCreator.toLocaleDateString(undefined, options);
     createDate([...dates, newDate]);
+    setEditDates([...dates, newDate]);
     const newTitle = title;
     setTitle([...titles, newTitle]);
     const newContent = noteContent;
     setNoteContent([...noteContents, newContent]);
   };
+
   const removeNote = (myKey) => {
     const deletePopUp = window.confirm(
       "Are you sure you want to delete this note?"
     );
     if (deletePopUp == true) {
-      const dateDuplicate = [...dates];
-      const titlesDuplicate = [...titles];
-      const noteContentsDuplicate = [...noteContents];
-      dateDuplicate.splice(myKey, 1);
-      titlesDuplicate.splice(myKey, 1);
-      noteContentsDuplicate.splice(myKey, 1);
-      createDate(dateDuplicate);
-      setTitle(titlesDuplicate);
-      setNoteContent(noteContentsDuplicate);
+      const datesAfterDelete = [...dates];
+      const titlesAfterDelete = [...titles];
+      const noteContentsAfterDelete = [...noteContents];
+      datesAfterDelete.splice(myKey, 1);
+      titlesAfterDelete.splice(myKey, 1);
+      noteContentsAfterDelete.splice(myKey, 1);
+      createDate(datesAfterDelete);
+      setEditDates(datesAfterDelete);
+      setTitle(titlesAfterDelete);
+      setNoteContent(noteContentsAfterDelete);
     }
   };
+
+  const [editNote, setEditNote] = useState(false);
+
+  const exitEditNoteHandler = () => {
+    setEditNote(false);
+  };
+
+  const editNoteHandler = () => {
+    setEditNote(true);
+  };
+
+  const RenderModal = () => {
+    const submitNoteEdit = (e) => {
+      e.preventDefault();
+      if (noteContents != "") {
+        exitEditNoteHandler();
+        const editedDateCreator = new Date();
+        const options = {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+        };
+        const newEditedDate = editedDateCreator.toLocaleDateString(
+          undefined,
+          options
+        );
+        editDates.splice(modalKey, 1, newEditedDate);
+      } else {
+        alert(
+          "Can't save a note without content. Please add some content before saving changes."
+        );
+      }
+    };
+
+    const titleEditChange = (e) => {
+      const editedTitlesArr = [...titles];
+      editedTitlesArr.splice(modalKey, 1, e.target.value);
+      setTitle(editedTitlesArr);
+      setModalTitle(editedTitlesArr[modalKey]);
+    };
+
+    const noteContentEditChange = (e) => {
+      const editedContentArr = [...noteContents];
+      editedContentArr.splice(modalKey, 1, e.target.value);
+      setNoteContent(editedContentArr);
+      setModalText(editedContentArr[modalKey]);
+    };
+
+    const diplayEditDateCondition = () => {
+      if (editDates[modalKey] != modalDate) {
+        return (
+          <div className="edit-date">
+            <b>Last edited: </b>
+            {editDates[modalKey]}
+          </div>
+        );
+      }
+    };
+
+    if (editNote == false) {
+      return (
+        <div>
+          <button className="modal-close-button" onClick={closeModal}>
+            x
+          </button>
+          <div className="modal-date">
+            <h4 className="creation-date-title">Created on: </h4> {modalDate}
+          </div>
+          <h2 className="modal-title">{modalTitle}</h2>
+          <p className="modal-text-content">{modalText}</p>
+          <div className="modal-footer">
+            <button className="modal-edit-button" onClick={editNoteHandler}>
+              Edit note
+            </button>
+            {diplayEditDateCondition()}
+          </div>
+        </div>
+      );
+    } else if (editNote == true) {
+      return (
+        <div>
+          <button className="modal-close-button" onClick={closeModal}>
+            x
+          </button>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+            className="modal-edit-form"
+          >
+            <div>{modalDate}</div>
+            <input
+              onChange={titleEditChange}
+              className="modal-edit-title"
+              defaultValue={titles[modalKey]}
+            ></input>
+            <textarea
+              onChange={noteContentEditChange}
+              className="modal-edit-text"
+              defaultValue={noteContents[modalKey]}
+            ></textarea>
+          </form>
+          <div className="modal-footer">
+            <button className="modal-edit-button" onClick={submitNoteEdit}>
+              Save Changes
+            </button>
+            {diplayEditDateCondition()}
+          </div>
+        </div>
+      );
+    }
+  };
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Notes App</h1>
       </header>
-      <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className="modal">
-        <button className="modal-close-button" onClick={closeModal}>
-          x
-        </button>
-        <p className="modal-date">{modalDate}</p>
-        <h2 className="modal-title">{modalTitle}</h2>
-        <p className="modal-text-content">{modalText}</p>
-        <button className="modal-edit-button">Edit note</button>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        className="modal"
+        modalKey={modalKey}
+      >
+        {RenderModal()}
       </Modal>
-
-      <NoteCreatorForm addNote={addNote} />
+      <NoteCreatorForm postNote={postNote} />
       <div className="note-grid-box">
         {dates.map((date, key) => {
           return (
