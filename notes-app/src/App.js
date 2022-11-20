@@ -25,8 +25,12 @@ function App() {
     setModalKey(myKey);
   }
   function closeModal() {
-    setIsOpen(false);
-    exitEditNoteHandler();
+    if (editNote == true) {
+      alert("Please save before exiting.");
+    } else {
+      setIsOpen(false);
+      exitEditNoteHandler();
+    }
   }
 
   const postNote = (title, noteContent) => {
